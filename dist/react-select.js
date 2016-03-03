@@ -67,8 +67,9 @@ var Async = _react2['default'].createClass({
 		noResultsText: _react2['default'].PropTypes.string, // placeholder displayed when there are no matching search results (shared with Select)
 		placeholder: stringOrNode, // field placeholder, displayed when there's no value (shared with Select)
 		searchPromptText: _react2['default'].PropTypes.string, // label to prompt for search input
-		searchingText: _react2['default'].PropTypes.string },
-	// message to display while options are loading
+		searchingText: _react2['default'].PropTypes.string, // message to display while options are loading
+		value: _react2['default'].PropTypes.any // initial field value
+	},
 	getDefaultProps: function getDefaultProps() {
 		return {
 			cache: true,
@@ -98,6 +99,9 @@ var Async = _react2['default'].createClass({
 			this.setState({
 				cache: initCache(nextProps.cache)
 			});
+		}
+		if (nextProps.value !== this.props.value) {
+			this.loadOptions('');
 		}
 	},
 	focus: function focus() {
@@ -1058,10 +1062,14 @@ var Select = _react2['default'].createClass({
 		var _this5 = this;
 
 		if (!this.props.name) return;
-		var value = valueArray.map(function (i) {
-			return stringifyValue(i[_this5.props.valueKey]);
-		}).join(this.props.delimiter);
-		return _react2['default'].createElement('input', { type: 'hidden', ref: 'value', name: this.props.name, value: value, disabled: this.props.disabled });
+		return valueArray.map(function (item, index) {
+			return _react2['default'].createElement('input', { key: 'hidden.' + index,
+				type: 'hidden',
+				ref: 'value' + index,
+				name: _this5.props.name,
+				value: stringifyValue(item[_this5.props.valueKey]),
+				disabled: _this5.props.disabled });
+		});
 	},
 
 	getFocusableOption: function getFocusableOption(selectedOption) {
