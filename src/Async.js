@@ -54,6 +54,7 @@ const Async = React.createClass({
 		placeholder: stringOrNode,                      // field placeholder, displayed when there's no value (shared with Select)
 		searchPromptText: React.PropTypes.string,       // label to prompt for search input
 		searchingText: React.PropTypes.string,          // message to display while options are loading
+		value: React.PropTypes.any                      // initial field value
 	},
 	getDefaultProps () {
 		return {
@@ -84,6 +85,9 @@ const Async = React.createClass({
 			this.setState({
 				cache: initCache(nextProps.cache),
 			});
+		}
+		if (nextProps.value !== this.props.value) {
+			this.loadOptions('');
 		}
 	},
 	focus () {
